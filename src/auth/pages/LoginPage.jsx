@@ -1,26 +1,13 @@
 import { Google } from '@mui/icons-material';
 import { Button, TextField, Typography, Link } from '@mui/material';
 import Grid from '@mui/material/Grid2';
-import React from 'react'
 import { Link as RouterLink } from 'react-router';
+import { AuthLayout } from '../layout/AuthLayout';
 
 export const LoginPage = () => {
   return (
 
-    <Grid 
-      container 
-      spacing={0}
-      direction={"column"}
-      alignContent={"center"}
-      justifyContent={"center"}
-      sx={{ minHeight: "100vh", backgroundColor: "primary.main", padding: 4 }}
-    >
-      <Grid  
-        className="box-shadow" 
-        size={3}
-        sx={{ width: { sm: 450, xs: 300 }, backgroundColor: "rgba(256,256,256,0.9)", padding: 3, borderRadius: 2 }}>
-
-          <Typography variant="h5" sx={{ mb: 1 }}>Login</Typography>
+    <AuthLayout title="Login">
 
           <form>
             <Grid container>
@@ -50,12 +37,11 @@ export const LoginPage = () => {
               }}>
                 <Link component={RouterLink} to="/auth/register">Crear una cuenta</Link>
               </Grid>
-              
+
             </Grid>
           </form>
 
-      </Grid>
-    </Grid>
+    </AuthLayout>
 
   )
 }
