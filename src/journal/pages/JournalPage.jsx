@@ -1,4 +1,5 @@
 import { JournalLayout } from '../layout/JournalLayout'
+import { NoteView } from '../view/NoteView'
 import { NothingSelectedView } from '../view/NothingSelectedView'
 
 export const JournalPage = () => {
@@ -6,9 +7,10 @@ export const JournalPage = () => {
     <JournalLayout>  
 
       {/* Nothing selected */}
-      <NothingSelectedView />
+      {/* <NothingSelectedView /> */}
 
       {/* Note View */}
+      <NoteView />
 
     </JournalLayout>
   )
