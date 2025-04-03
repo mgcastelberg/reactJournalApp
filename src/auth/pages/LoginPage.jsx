@@ -5,7 +5,7 @@ import { Link as RouterLink } from 'react-router';
 import { AuthLayout } from '../layout/AuthLayout';
 import { useForm } from '../../hooks';
 import { useDispatch } from 'react-redux';
-import { checkingAuthentication } from '../../store/auth/thunks';
+import { checkingAuthentication, startGoogleSignIn } from '../../store/auth/thunks';
 
 export const LoginPage = () => {
 
@@ -24,7 +24,7 @@ export const LoginPage = () => {
 
   const onGoogleSignIn = () => {
     console.log('onGoogleSignIn');
-    dispach( checkingAuthentication() );
+    dispach( startGoogleSignIn() );
   }
 
   return (
