@@ -4,10 +4,14 @@ import Grid from '@mui/material/Grid2';
 import { Link as RouterLink } from 'react-router';
 import { AuthLayout } from '../layout/AuthLayout';
 import { useForm } from '../../hooks';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { checkingAuthentication, startGoogleSignIn } from '../../store/auth/thunks';
+import { useMemo } from 'react';
 
 export const LoginPage = () => {
+
+  // Lo usearemos para bloquear los botones
+  const { status } = useSelector( state => state.auth );
 
   const dispach = useDispatch();
 
@@ -15,6 +19,9 @@ export const LoginPage = () => {
     'email': 'jmgc@terraunida.com',
     'password': '123456'
   });
+
+  // Lo usearemos para bloquear los botones
+  const isAuthenticating = useMemo( () => status === 'checking', [ status ]);
 
   const onSubmit = ( event ) => {
     event.preventDefault();
@@ -42,13 +49,13 @@ export const LoginPage = () => {
 
               <Grid container size={12} spacing={2} sx={{ mb: 1, mt: 2 }}>
                 <Grid size={{ xs: 12, md: 6 }}>
-                  <Button fullWidth variant="outlined" onClick={ onGoogleSignIn } >
+                  <Button fullWidth variant="outlined" onClick={ onGoogleSignIn } disabled={ isAuthenticating } >
                     <Google /> 
                     <Typography sx={{ ml: 1, fontSize: 15 }}>Google</Typography>
                   </Button>
                 </Grid>
                 <Grid size={{ xs: 12, md: 6 }}>
-                  <Button type='submit' fullWidth variant="contained" >Login</Button>
+                  <Button type='submit' fullWidth variant="contained" disabled={ isAuthenticating } >Login</Button>
                 </Grid>
               </Grid>
 
