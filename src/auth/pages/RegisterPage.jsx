@@ -10,9 +10,18 @@ const formData = {
   displayName: 'Manux Dev'
 };
 
+const formValidations = {
+  email: [ (value) => value.includes('@'), 'El correo debe ser valido'],
+  paswword: [ (value) => value.length >= 6, 'El passwor debe tener mas de 6 caracteres'],
+  displayName: [ (value) => value.length >= 1, 'El nombre es obligatorio'],  
+}
+
 export const RegisterPage = () => {
 
-  const { displayName, email, password, onInputChange } = useForm( formData );
+  const { 
+      formState, displayName, email, password, onInputChange,
+      isFormValid, displayNameValid, emailValid, passwordValid
+  } = useForm( formData, formValidations );
 
   const onSubmit = ( event ) => {
     event.preventDefault();
@@ -25,7 +34,10 @@ export const RegisterPage = () => {
           <form onSubmit={ onSubmit }>
             <Grid container>
               <Grid  size={12} sx={{ mt: 2 }}>
-                <TextField label="Nombre Completo" fullWidth type="text" name="displayName" value={ displayName } onChange={ onInputChange } autoComplete='off' />
+                <TextField label="Nombre Completo" fullWidth type="text" name="displayName" value={ displayName } onChange={ onInputChange } autoComplete='off'
+                 error={ !displayNameValid }
+                 helperText={ !displayNameValid && 'El nombre es obligatorio' }
+                />
               </Grid>
               <Grid  size={12} sx={{ mt: 2 }}>
                 <TextField label="Correo" fullWidth type="email" name='email' value={ email } onChange={ onInputChange } autoComplete='off' />
