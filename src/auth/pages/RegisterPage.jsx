@@ -12,7 +12,7 @@ const formData = {
 
 const formValidations = {
   email: [ (value) => value.includes('@'), 'El correo debe ser valido'],
-  paswword: [ (value) => value.length >= 6, 'El passwor debe tener mas de 6 caracteres'],
+  password: [ (value) => value.length >= 6, 'El passwor debe tener mas de 6 caracteres'],
   displayName: [ (value) => value.length >= 1, 'El nombre es obligatorio'],  
 }
 
@@ -22,6 +22,8 @@ export const RegisterPage = () => {
       formState, displayName, email, password, onInputChange,
       isFormValid, displayNameValid, emailValid, passwordValid
   } = useForm( formData, formValidations );
+
+  console.log( displayNameValid );
 
   const onSubmit = ( event ) => {
     event.preventDefault();
@@ -35,7 +37,7 @@ export const RegisterPage = () => {
             <Grid container>
               <Grid  size={12} sx={{ mt: 2 }}>
                 <TextField label="Nombre Completo" fullWidth type="text" name="displayName" value={ displayName } onChange={ onInputChange } autoComplete='off'
-                 error={ !displayNameValid }
+                 error={ !displayNameValid ? true : false }
                  helperText={ !displayNameValid && 'El nombre es obligatorio' }
                 />
               </Grid>
