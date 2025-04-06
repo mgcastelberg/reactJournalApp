@@ -5,6 +5,8 @@ import { AuthLayout } from '../layout/AuthLayout';
 import { useForm } from '../../hooks';
 import { useState } from 'react';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
+import { useDispatch } from 'react-redux';
+import { startCreatingUserWithEmailPassword } from '../../store/auth/thunks';
 
 const formData = {
   email: '',
@@ -20,6 +22,7 @@ const formValidations = {
 
 export const RegisterPage = () => {
 
+  const dispatch = useDispatch();
   const [formSubmitted, setFormSubmitted] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
 
@@ -40,7 +43,11 @@ export const RegisterPage = () => {
   const onSubmit = ( event ) => {
     event.preventDefault();
     setFormSubmitted(true);
-    console.log( formState );
+
+    if( !isFormValid ) return;
+
+    dispatch( startCreatingUserWithEmailPassword( formState ) );
+    // console.log( formState );
   }
 
   return (
