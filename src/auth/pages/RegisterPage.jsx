@@ -1,55 +1,105 @@
-import { Button, TextField, Typography, Link } from '@mui/material';
+import { Button, TextField, Typography, Link, Alert, FormControl, InputLabel, OutlinedInput, InputAdornment, IconButton, FormHelperText } from '@mui/material';
 import Grid from '@mui/material/Grid2';
 import { Link as RouterLink } from 'react-router';
 import { AuthLayout } from '../layout/AuthLayout';
 import { useForm } from '../../hooks';
+import { useState } from 'react';
+import { Visibility, VisibilityOff } from '@mui/icons-material';
 
 const formData = {
-  email: 'jmgc@terraunida.com',
-  password: '123456',
-  displayName: 'Manux Dev'
+  email: '',
+  password: '',
+  displayName: ''
 };
 
 const formValidations = {
   email: [ (value) => value.includes('@'), 'El correo debe ser valido'],
-  password: [ (value) => value.length >= 6, 'El passwor debe tener mas de 6 caracteres'],
+  password: [ (value) => value.length >= 6, 'El password debe tener mas de 6 caracteres'],
   displayName: [ (value) => value.length >= 1, 'El nombre es obligatorio'],  
 }
 
 export const RegisterPage = () => {
 
-  const { 
+  const [formSubmitted, setFormSubmitted] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+
+  const handleClickShowPassword = () => setShowPassword((show) => !show);
+  const handleMouseDownPassword = (event) => {
+    event.preventDefault();
+  };
+
+  const handleMouseUpPassword = (event) => {
+    event.preventDefault();
+  };
+
+  const {
       formState, displayName, email, password, onInputChange,
       isFormValid, displayNameValid, emailValid, passwordValid
   } = useForm( formData, formValidations );
 
-  console.log( displayNameValid );
-
   const onSubmit = ( event ) => {
     event.preventDefault();
-    console.log({ displayName, email, password });
+    setFormSubmitted(true);
+    console.log( formState );
   }
 
   return (
     <AuthLayout title="Crear cuenta">
+          
+          {/* {!isFormValid && (
+            <Alert variant="outlined" severity="error">
+              Corrige los errores
+            </Alert>
+          )} */}
 
           <form onSubmit={ onSubmit }>
             <Grid container>
               <Grid  size={12} sx={{ mt: 2 }}>
                 <TextField label="Nombre Completo" fullWidth type="text" name="displayName" value={ displayName } onChange={ onInputChange } autoComplete='off'
-                 error={ !displayNameValid ? true : false }
-                 helperText={ !displayNameValid && 'El nombre es obligatorio' }
+                 error={ !!displayNameValid && formSubmitted } // !! convierte en boolean
+                 helperText={ !!displayNameValid && formSubmitted ? displayNameValid : '' }
                 />
               </Grid>
+
               <Grid  size={12} sx={{ mt: 2 }}>
-                <TextField label="Correo" fullWidth type="email" name='email' value={ email } onChange={ onInputChange } autoComplete='off' />
+                <TextField label="Correo" fullWidth type="email" name='email' value={ email } onChange={ onInputChange } autoComplete='off'
+                  error={ !!emailValid && formSubmitted } // !! convierte en boolean
+                  helperText={!!emailValid && formSubmitted ? emailValid : ''}
+                />
               </Grid>
+
               <Grid  size={12} sx={{ mt: 2 }}>
-                <TextField label="Contraseña" fullWidth type="password" name='password' value={ password } onChange={ onInputChange } />
+                <FormControl fullWidth variant="outlined" error={!!passwordValid && formSubmitted}>
+                  <InputLabel htmlFor="password">Contraseña</InputLabel>
+                  <OutlinedInput
+                    id="password"
+                    type={showPassword ? 'text' : 'password'}
+                    label="Contraseña"
+                    name="password"
+                    value={password}
+                    onChange={onInputChange}
+                    endAdornment={
+                      <InputAdornment position="end">
+                        <IconButton
+                          onClick={handleClickShowPassword}
+                          onMouseDown={handleMouseDownPassword}
+                          edge="end"
+                        >
+                          {showPassword ? <VisibilityOff /> : <Visibility />}
+                        </IconButton>
+                      </InputAdornment>
+                    }
+                  />
+                  <FormHelperText>{!!passwordValid && formSubmitted ? passwordValid : ''}</FormHelperText>
+                </FormControl>
               </Grid>
-              <Grid  size={12} sx={{ mt: 2 }}>
-                <TextField label="Confirmar Contraseña" fullWidth type="confirm_password" name='confirm_password' value={ password } onChange={ onInputChange } />
-              </Grid>
+
+              {/* <Grid  size={12} sx={{ mt: 2 }}>
+                <TextField label="Contraseña" fullWidth type="password" name='password' value={ password } onChange={ onInputChange } 
+                  error={ !!passwordValid && formSubmitted } // !! convierte en boolean
+                  helperText={ !!passwordValid && formSubmitted ? passwordValid : '' }
+                />
+              </Grid> */}
 
               <Grid container size={12} spacing={2} sx={{ mb: 1, mt: 2 }} >
                   <Button type='submit' fullWidth variant="contained" >Crear cuenta</Button>
