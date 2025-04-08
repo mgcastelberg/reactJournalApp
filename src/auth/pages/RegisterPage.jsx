@@ -3,9 +3,9 @@ import Grid from '@mui/material/Grid2';
 import { Link as RouterLink } from 'react-router';
 import { AuthLayout } from '../layout/AuthLayout';
 import { useForm } from '../../hooks';
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { startCreatingUserWithEmailPassword } from '../../store/auth/thunks';
 
 const formData = {
@@ -25,6 +25,9 @@ export const RegisterPage = () => {
   const dispatch = useDispatch();
   const [formSubmitted, setFormSubmitted] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
+
+  const { status, errorMessage } =useSelector( state => state.auth );
+  const isCheckingAuthentication = useMemo( () => status === 'checking', [ status ]);
 
   const handleClickShowPassword = () => setShowPassword((show) => !show);
   const handleMouseDownPassword = (event) => {
@@ -108,8 +111,23 @@ export const RegisterPage = () => {
                 />
               </Grid> */}
 
+              <Grid size={12} sx={{ mt: 2 }} 
+                display={ !!errorMessage ? '' : 'none' }
+              >
+                <Alert severity='error' variant="outlined">
+                  { errorMessage }
+                </Alert>
+              </Grid>
+
               <Grid container size={12} spacing={2} sx={{ mb: 1, mt: 2 }} >
-                  <Button type='submit' fullWidth variant="contained" >Crear cuenta</Button>
+                  <Button 
+                    type='submit' 
+                    fullWidth 
+                    variant="contained" 
+                    disabled={ isCheckingAuthentication }
+                  >
+                    Crear cuenta
+                  </Button>
               </Grid>
 
               <Grid container size={12} direction="row" sx={{
