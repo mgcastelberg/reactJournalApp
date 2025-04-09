@@ -1,17 +1,17 @@
 import { Google } from '@mui/icons-material';
-import { Button, TextField, Typography, Link } from '@mui/material';
+import { Button, TextField, Typography, Link, Alert } from '@mui/material';
 import Grid from '@mui/material/Grid2';
 import { Link as RouterLink } from 'react-router';
 import { AuthLayout } from '../layout/AuthLayout';
 import { useForm } from '../../hooks';
 import { useDispatch, useSelector } from 'react-redux';
-import { checkingAuthentication, startGoogleSignIn } from '../../store/auth/thunks';
+import { startGoogleSignIn, startLoginWithEmailPassword } from '../../store/auth/thunks';
 import { useMemo } from 'react';
 
 export const LoginPage = () => {
 
   // Lo usearemos para bloquear los botones
-  const { status } = useSelector( state => state.auth );
+  const { status, errorMessage } = useSelector( state => state.auth );
 
   const dispach = useDispatch();
 
@@ -20,13 +20,14 @@ export const LoginPage = () => {
     'password': '123456'
   });
 
-  // Lo usearemos para bloquear los botones
+  // Lo usearemos para bloquear los botones y  para validar si esta autenticando
   const isAuthenticating = useMemo( () => status === 'checking', [ status ]);
 
   const onSubmit = ( event ) => {
     event.preventDefault();
-    console.log({ email, password });
-    dispach( checkingAuthentication() );
+    // console.log({ email, password });
+    // dispach( checkingAuthentication() ); //esta no es la accion
+    dispach( startLoginWithEmailPassword({ email, password }) );
   }
 
   const onGoogleSignIn = () => {
@@ -45,6 +46,14 @@ export const LoginPage = () => {
               </Grid>
               <Grid  size={12} sx={{ mt: 2 }}>
                 <TextField label="Contraseña" fullWidth type="password" name='password' value={ password } onChange={ onInputChange } autoComplete='off' />
+              </Grid>
+
+              <Grid size={12} sx={{ mt: 2 }} 
+                display={ !!errorMessage ? '' : 'none' }
+              >
+                <Alert severity='error' variant="outlined">
+                  { errorMessage }
+                </Alert>
               </Grid>
 
               <Grid container size={12} spacing={2} sx={{ mb: 1, mt: 2 }}>
