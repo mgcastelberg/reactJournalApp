@@ -62,7 +62,9 @@ export const RegisterPage = () => {
             </Alert>
           )} */}
 
-          <form onSubmit={ onSubmit }>
+          <form onSubmit={ onSubmit }
+            className="animate__animated animate__fadeIn animate__faster"
+          >
             <Grid container>
               <Grid  size={12} sx={{ mt: 2 }}>
                 <TextField label="Nombre Completo" fullWidth type="text" name="displayName" value={ displayName } onChange={ onInputChange } autoComplete='off'
