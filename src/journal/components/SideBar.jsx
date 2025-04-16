@@ -1,8 +1,12 @@
 import { InboxOutlined, MailOutlined } from '@mui/icons-material'
-import { Box, Divider, Drawer, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Toolbar, Typography } from '@mui/material'
+import { Box, Divider, Drawer, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Paper, Toolbar, Typography } from '@mui/material'
+import { useSelector } from 'react-redux'
 
 export const SideBar = ({drawerWidth}) => {
-  return (
+
+    const { displayName } = useSelector( state => state.auth );
+
+return (
     <Box
         component="nav"
         sx={{ width: { sm: drawerWidth }, flexShrink: { sm: 0 } }}
@@ -20,6 +24,18 @@ export const SideBar = ({drawerWidth}) => {
                 <Typography variant="h6" noWrap component="div">JournalApp</Typography>
             </Toolbar>
             <Divider/>
+
+            <Box
+                sx={{
+                  p: 2,
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center'
+                }}
+              >
+                <Typography variant="subtitle" noWrap component="div">{ displayName }</Typography>
+                
+            </Box>
             
             <List>
                 {
