@@ -1,14 +1,17 @@
 import { collection, doc, setDoc } from "firebase/firestore/lite";
 import { FirebaseDB } from "../../firebase/config";
+import { addNewEmptyNote, savingNewNote, setActiveNote } from "./journalSlice";
 
 // Importante: thunk es cuando tengo que despachar acciones asincronas
 export const startNewNote = () => {
     return async(dispatch, getState) => {
+
+        dispatch( savingNewNote() );
         
-        console.log(getState()); // para ver el estado
+        // console.log(getState()); // para ver el estado
         const { uid } = getState().auth;
 
-        console.log(uid);
+        // console.log(uid);
         
         const newNote = {
             title: '',
@@ -19,12 +22,14 @@ export const startNewNote = () => {
         const newDoc = doc( collection( FirebaseDB, `${ uid }/journal/notes` ) );
 
         const setDocResp = await setDoc( newDoc, newNote ); // Para guardarlo
-        console.log({newDoc, setDocResp});
+        // console.log({newDoc, setDocResp});
+
+        newNote.id = newDoc.id;
 
         
         // Los dispatch son acciones que despachan acciones asincronas
-        // dispatch( newNote )
-        // dispatch( activateNote )
+        dispatch( addNewEmptyNote( newNote ) );
+        dispatch( setActiveNote( newNote ) );
         
     }
 }
