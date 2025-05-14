@@ -36,7 +36,8 @@ export const NoteView = () => {
                 variant='filled'
                 fullWidth
                 multiline
-                placeholder='¿Qué sucedió en el día de hoy'
+                label='Descripción'
+                placeholder='¿Qué sucedió en el día de hoy?'
                 sx={{ border: 'none', mb:1 }}
                 minRows={5}
             />

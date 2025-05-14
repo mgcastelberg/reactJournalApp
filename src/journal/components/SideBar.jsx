@@ -1,10 +1,11 @@
-import { InboxOutlined, MailOutlined } from '@mui/icons-material'
-import { Box, Divider, Drawer, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Paper, Toolbar, Typography } from '@mui/material'
+import { Box, Divider, Drawer, List, Toolbar, Typography } from '@mui/material'
 import { useSelector } from 'react-redux'
+import { SideBarItem } from './SideBarItem';
 
 export const SideBar = ({drawerWidth}) => {
 
     const { displayName } = useSelector( state => state.auth );
+    const { notes } = useSelector( state => state.journal );
 
 return (
     <Box
@@ -39,15 +40,8 @@ return (
             
             <List>
                 {
-                    ['Inbox', 'Starred', 'Send email', 'Drafts'].map((text, index) => (
-                        <ListItem key={text} disablePadding>
-                            <ListItemButton>
-                                <ListItemIcon>
-                                    {index % 2 === 0 ? <InboxOutlined /> : <MailOutlined />}
-                                </ListItemIcon>
-                                <ListItemText primary={text} />
-                            </ListItemButton>
-                        </ListItem>
+                    notes.map((note, index) => (
+                        <SideBarItem key={note.id} note={note} index={index} />
                     ))
                 }
             </List>
