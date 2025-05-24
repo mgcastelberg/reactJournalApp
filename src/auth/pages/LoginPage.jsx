@@ -8,6 +8,11 @@ import { useDispatch, useSelector } from 'react-redux';
 import { startGoogleSignIn, startLoginWithEmailPassword } from '../../store/auth/thunks';
 import { useMemo } from 'react';
 
+const formData = {
+  'email': 'jmgc@terraunida.com',
+  'password': '123456'
+};
+
 export const LoginPage = () => {
 
   // Lo usearemos para bloquear los botones
@@ -15,10 +20,12 @@ export const LoginPage = () => {
 
   const dispach = useDispatch();
 
-  const { email, password, onInputChange } = useForm({
-    'email': 'jmgc@terraunida.com',
-    'password': '123456'
-  });
+  // const { email, password, onInputChange } = useForm({
+  //   'email': 'jmgc@terraunida.com',
+  //   'password': '123456'
+  // });
+
+  const { email, password, onInputChange } = useForm(formData);
 
   // Lo usearemos para bloquear los botones y  para validar si esta autenticando
   const isAuthenticating = useMemo( () => status === 'checking', [ status ]);
