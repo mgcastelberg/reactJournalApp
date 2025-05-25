@@ -1,6 +1,6 @@
 import { collection, doc, setDoc } from "firebase/firestore/lite";
 import { FirebaseDB } from "../../firebase/config";
-import { addNewEmptyNote, savingNewNote, setActiveNote, setNotes, setSaving } from "./journalSlice";
+import { addNewEmptyNote, savingNewNote, setActiveNote, setNotes, setSaving, updateNote } from "./journalSlice";
 import { loadNotes } from "../../helpers";
 
 // Importante: thunk es cuando tengo que despachar acciones asincronas
@@ -64,6 +64,8 @@ export const startSaveNote = () => {
 
         const docRef = doc( FirebaseDB, `${ uid }/journal/notes/${ note.id }` ); // Para actualizar
         await setDoc( docRef, noteToFirestore, { merge: true } ); // el merge es para actualizar y no crear un nuevo documento 
+
+        dispatch( updateNote(note) );
 
     }
 }

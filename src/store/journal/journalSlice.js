@@ -30,7 +30,15 @@ export const journalSlice = createSlice({
             // TODO: mensaje de error
         },
         updateNote: ( state, action ) => {
-
+            state.isSaving = false;
+            // barrer listado de notas y actualizar la que corresponda
+            state.notes = state.notes.map( note => {
+                if ( note.id === action.payload.id ) {
+                    return action.payload;
+                }
+                return note;
+            });
+            // TODO: mostrar mensaje de actualizacion
         },
         deleteNoteById:(state, action) =>{
 
