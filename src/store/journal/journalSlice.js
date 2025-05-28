@@ -20,6 +20,7 @@ export const journalSlice = createSlice({
         setActiveNote: ( state, action ) => {
             // console.log(action.payload);
             state.active = action.payload;
+            state.messageSaved = '';
         },
         setNotes: ( state, action ) => {
             // console.log(action.payload);
@@ -28,6 +29,7 @@ export const journalSlice = createSlice({
         setSaving: ( state ) => {
             state.isSaving = true;
             // TODO: mensaje de error
+            state.messageSaved = '';
         },
         updateNote: ( state, action ) => {
             state.isSaving = false;
@@ -39,6 +41,8 @@ export const journalSlice = createSlice({
                 return note;
             });
             // TODO: mostrar mensaje de actualizacion
+            // Los reducers no deben disparar funciones de terceros como sweetalert
+            state.messageSaved = `Nota actualizada correctamente`;
         },
         deleteNoteById:(state, action) =>{
 
