@@ -1,7 +1,7 @@
 import { collection, doc, setDoc } from "firebase/firestore/lite";
 import { FirebaseDB } from "../../firebase/config";
 import { addNewEmptyNote, savingNewNote, setActiveNote, setNotes, setSaving, updateNote } from "./journalSlice";
-import { loadNotes } from "../../helpers";
+import { fileUpload, loadNotes } from "../../helpers";
 
 // Importante: thunk es cuando tengo que despachar acciones asincronas
 export const startNewNote = () => {
@@ -67,5 +67,14 @@ export const startSaveNote = () => {
 
         dispatch( updateNote(note) );
 
+    }
+}
+
+export const startUploadingFiles = ( files = [] ) => {
+    return async(dispatch) => {
+        dispatch( setSaving() ); // Bloquear el botón y mostrar el spinner
+        console.log(files);
+
+        await fileUpload( files[0] );
     }
 }
