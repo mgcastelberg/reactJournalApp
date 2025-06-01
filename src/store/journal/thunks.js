@@ -1,6 +1,6 @@
 import { collection, doc, setDoc } from "firebase/firestore/lite";
 import { FirebaseDB } from "../../firebase/config";
-import { addNewEmptyNote, savingNewNote, setActiveNote, setNotes, setSaving, updateNote } from "./journalSlice";
+import { addNewEmptyNote, savingNewNote, setActiveNote, setNotes, setPhotoToActiveNote, setSaving, updateNote } from "./journalSlice";
 import { fileUpload, loadNotes } from "../../helpers";
 
 // Importante: thunk es cuando tengo que despachar acciones asincronas
@@ -28,7 +28,6 @@ export const startNewNote = () => {
 
         newNote.id = newDoc.id;
 
-        
         // Los dispatch son acciones que despachan acciones asincronas
         dispatch( addNewEmptyNote( newNote ) );
         dispatch( setActiveNote( newNote ) );
@@ -75,6 +74,17 @@ export const startUploadingFiles = ( files = [] ) => {
         dispatch( setSaving() ); // Bloquear el botón y mostrar el spinner
         console.log(files);
 
-        await fileUpload( files[0] );
+        // await fileUpload( files[0] );
+        // Crear un array de promesas
+        const fileUploadPromises = [];
+        for( const file of files ) {
+            fileUploadPromises.push( fileUpload( file ) );
+        }
+
+        const photoUrls = await Promise.all( fileUploadPromises );
+        console.log(photoUrls);
+
+        dispatch( setPhotoToActiveNote(photoUrls) );
+
     }
 }
