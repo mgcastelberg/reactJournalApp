@@ -1,6 +1,6 @@
-import { collection, doc, setDoc } from "firebase/firestore/lite";
+import { collection, deleteDoc, doc, setDoc } from "firebase/firestore/lite";
 import { FirebaseDB } from "../../firebase/config";
-import { addNewEmptyNote, savingNewNote, setActiveNote, setNotes, setPhotoToActiveNote, setSaving, updateNote } from "./journalSlice";
+import { addNewEmptyNote, deleteNoteById, savingNewNote, setActiveNote, setNotes, setPhotoToActiveNote, setSaving, updateNote } from "./journalSlice";
 import { fileUpload, loadNotes } from "../../helpers";
 
 // Importante: thunk es cuando tengo que despachar acciones asincronas
@@ -85,6 +85,24 @@ export const startUploadingFiles = ( files = [] ) => {
         console.log(photoUrls);
 
         dispatch( setPhotoToActiveNote(photoUrls) );
+
+    }
+}
+
+export const startDeletingNote = () => {
+    return async(dispatch, getState) => {
+
+        const { uid } = getState().auth;
+        const { active:note } = getState().journal;
+
+        // console.log( {uid, note} );
+        
+        if( !uid ) throw new Error('El usuario no está autenticado');
+
+        const docRef = doc( FirebaseDB, `${ uid }/journal/notes/${ note.id }` ); // Para apuntar al documento
+        await deleteDoc( docRef ); 
+
+        dispatch( deleteNoteById(note.id) );
 
     }
 }
